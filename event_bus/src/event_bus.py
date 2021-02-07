@@ -9,7 +9,13 @@ ctx = Context.instance()
 logger = logging.getLogger(__name__)
 
 
-async def main(port_in, port_out):
+async def main(port_in: str, port_out: str):
+    """ Create distribution core
+
+    Args:
+        port_in (str): Port that bus is listening on for new events
+        port_out (str): Port on which events are distributed to other components
+    """
     logger.info(f'Listening on {port_in=} and {port_out=}')
     socket_in = ctx.socket(zmq.SUB)
     socket_out = ctx.socket(zmq.PUB)
