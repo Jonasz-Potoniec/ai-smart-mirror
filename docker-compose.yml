@@ -3,7 +3,7 @@ version: "3.8"
 services:
   event-bus:
     build:
-      context: ./event_bus
+      context: ./src/event_bus
       args:
         - PORT_IN=5555
         - PORT_OUT=5556
