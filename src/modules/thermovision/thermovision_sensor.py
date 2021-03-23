@@ -8,7 +8,7 @@ import math
 class ThermovisionSensor:
     def __init__(self):
         self.mlx = seeed_mlx9064x.grove_mxl90641()
-        self.mlx.refresh_rate = seeed_mlx9064x.RefreshRate.REFRESH_2_HZ
+        self.mlx.refresh_rate = seeed_mlx9064x.RefreshRate.REFRESH_8_HZ
         self.size_x = 16
         self.size_y = 12
 
@@ -20,18 +20,21 @@ class ThermovisionSensor:
         except ValueError:
             return -1
 
-    def getAvgTemperature(self):
-        return np.average(self.getFrame())
 
-    # def getTemperature(self, frame, percent_x, percent_y):
-    #     frame_2d = np.resize(frame, (self.size_y, self.size_x))
-    #     return frame_2d
+    def getTemperature(self):
+        measurement_points = self.getFrame()
 
+        if measurement_points == -1:
+            return np.nan
+        measurement_points = list(filter(lambda temp: 32 < float(temp) < 40, measurement_points))
+        return np.average(measurement_points)
+    
+        
 
 def main():
     thermal_sensor = ThermovisionSensor()
     while(True):
-        print(thermal_sensor.getAvgTemperature())
+        print(thermal_sensor.getTemperature())
 
 
 if __name__ == '__main__':
