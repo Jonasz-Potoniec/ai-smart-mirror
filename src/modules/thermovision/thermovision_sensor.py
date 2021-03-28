@@ -5,6 +5,8 @@ import seeed_mlx9064x
 import numpy as np
 import math
 import argparse
+import zmq
+import xdrlib
 
 class ThermovisionSensor:
     def __init__(self):
@@ -32,9 +34,24 @@ class ThermovisionSensor:
         
 
 def main(parser):
+    parser.add_argument('--hostname', default="127.0.0.1", help='Hostname to which connect to')
+    parser.add_argument('--port', default="5555", help='Port to which connect to')
+    parser.add_argument('--topic', type=int, default=20001, help='Event bus topic for the thermovision sensor')
+
+    init_args = parser.parse_args()
+    hostname = init_args.hostname
+    port = init_args.port
+    topic = init_args.topic
+
+    context = zmq.Context()
+    socket = context.socket(zmq.PUB)
+    socket.connect("tcp://%s:%s" % (hostname, port))
+    data_packer = xdrlib.Packer()
+
     thermal_sensor = ThermovisionSensor()
-    while(True):
-        print(thermal_sensor.getTemperature())
+    # while(True):
+    # trigger
+    # send temp
 
 
 def test():
@@ -45,12 +62,7 @@ def test():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Thermovision sensor')
-    parser.add_argument(
-        '-t',
-        help='Test thermovision sensor connection',
-        default=False,
-        action='store_true'
-    )
+    parser.add_argument('-t', help='Test thermovision sensor connection', default=False, action='store_true')
     init_args = parser.parse_args()
 
     if init_args.t:
