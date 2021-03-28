@@ -4,6 +4,7 @@
 import seeed_mlx9064x
 import numpy as np
 import math
+import argparse
 
 class ThermovisionSensor:
     def __init__(self):
@@ -20,7 +21,6 @@ class ThermovisionSensor:
         except ValueError:
             return -1
 
-
     def getTemperature(self):
         measurement_points = self.getFrame()
 
@@ -31,11 +31,29 @@ class ThermovisionSensor:
     
         
 
-def main():
+def main(parser):
     thermal_sensor = ThermovisionSensor()
     while(True):
         print(thermal_sensor.getTemperature())
 
 
+def test():
+    thermal_sensor = ThermovisionSensor()
+    for i in range(10)
+        print(thermal_sensor.getTemperature())
+
+
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description='Thermovision sensor')
+    parser.add_argument(
+        '-t',
+        help='Test thermovision sensor connection',
+        default=False,
+        action='store_true'
+    )
+    init_args = parser.parse_args()
+
+    if init_args.t:
+        test()
+    else
+        main(parser)
