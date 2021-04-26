@@ -109,12 +109,12 @@ def main():
 
     distance_sensor = DistanceSensor(trigger_pin, echo_pin)
 
-    # Allow module to settle
-    time.sleep(sensor_settle_time)
-
     event = Event()
     t = Thread(target=distance_sensor.watch, args=(sleep_time, event))
     t.start()
+
+    # Allow module to settle
+    time.sleep(sensor_settle_time)
     try:
         while True:
             logger.debug(f"Ultrasonic Measurement - Distance: {distance_sensor.distance} cm")
