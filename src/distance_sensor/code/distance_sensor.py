@@ -67,6 +67,7 @@ class DistanceSensor:
             self.send_trigger()
             time.sleep(sleep_time)
 
+
 def main():
     # Creates Argument Parser object named parser
     parser = argparse.ArgumentParser()
