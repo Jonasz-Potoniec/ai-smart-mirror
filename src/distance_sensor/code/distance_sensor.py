@@ -7,49 +7,8 @@ import xdrlib
 
 logger = logging.getLogger(__name__)
 
-import RPi.GPIO as GPIO
 import zmq
-
-# Consts that don't need to be set from the outside
-SPEED_OF_SOUND = 34300  # cm/s
-HALF_SPEED_OF_SOUND = SPEED_OF_SOUND / 2
-TRIGGER_PULSE_TIME = 0.00001  # Needs to be 10us pulse to trigger the sensor
-
-
-class DistanceSensor:
-    def __init__(self, trigger_pin, echo_pin):
-        self.trigger_pin = trigger_pin
-        self.echo_pin = echo_pin
-        self.echo_start = 0
-        self.echo_stop = 0
-
-    def send_trigger(self) -> None:
-        """ Send trigger pulse to fire up measurement process """
-        # Send pulse to trigger
-        GPIO.output(self.trigger_pin, True)
-        time.sleep(TRIGGER_PULSE_TIME)
-        GPIO.output(self.trigger_pin, False)
-
-    def handle_echo_pin_change(self, channel) -> None:
-        """ Handle changes for the pin (high and low voltage)
-            Parameters:
-                channel (int): A pin number to listen changes on
-        """
-        # Check if the pin is in High or Low state
-        if GPIO.input(channel):
-            self.echo_start = time.time()
-        else:
-            self.echo_stop = time.time()
-
-    def measure_distance(self) -> float:
-        """ Trigger sensor and measure a distance """
-        self.send_trigger()
-
-        # Calculate pulse length
-        pulse_duration = self.echo_stop - self.echo_start
-        calculated_distance = round(pulse_duration * HALF_SPEED_OF_SOUND, 2)
-
-        return calculated_distance
+from gpiozero import DistanceSensor
 
 
 def main():
@@ -90,28 +49,16 @@ def main():
     socket.connect(publish_url)
     data_packer = xdrlib.Packer()
 
-    logger.info("Ultrasonic Measurement. Setting up GPIO...")
+    logger.info(f"Ultrasonic Measurement. Setting up GPIO: trigger at {trigger_pin} and echo at {echo_pin}...")
 
-    # GPIO.BOARD map PIN numbers like on BOARD.
-    # GPIO.BCM map PIN numbers like in documentation.
-    GPIO.setmode(GPIO.BOARD)  # Setting PIN numbers context.
-    GPIO.setwarnings(False)
-    GPIO.setup(trigger_pin, GPIO.OUT)
-    GPIO.setup(echo_pin, GPIO.IN)
-
-    distance_sensor = DistanceSensor(trigger_pin, echo_pin)
-
-    GPIO.add_event_detect(echo_pin, GPIO.BOTH, callback=distance_sensor.handle_echo_pin_change)
-
-    # Set trigger to False (Low)
-    GPIO.output(trigger_pin, False)
+    distance_sensor = DistanceSensor(echo=echo_pin, trigger=trigger_pin, queue_len=2)
 
     # Allow module to settle
     time.sleep(sensor_settle_time)
 
     try:
         while True:
-            distance = distance_sensor.measure_distance()
+            distance = distance_sensor.distance * 100
             logger.debug(f"Ultrasonic Measurement - Distance: {distance} cm")
 
             # Send event if measured distance is less than set threshold
@@ -128,8 +75,6 @@ def main():
     except Exception as e:
         logger.exception(e)
         sys.exit(1)
-    finally:
-        GPIO.cleanup()
 
 
 if __name__ == '__main__':
