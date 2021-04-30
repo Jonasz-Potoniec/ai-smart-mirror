@@ -13,7 +13,8 @@ import zmq
 logger = logging.getLogger(__name__)
 
 class ThermovisionSensor:
-    """The class that supports a thermal imaging camera sensor
+    """
+    The class that supports a thermal imaging camera sensor
 
     For the configuration of the raspberry pi and the mxl90641 sensor,
     the maximum value of the sensor refresh is 8 HZ.
@@ -28,22 +29,28 @@ class ThermovisionSensor:
         self.horizontal_size = 16
         self.vertical_size = 12
 
-    """Returns a list of temperature values for each pixel"""
     def get_frame(self):
+        """
+        Returns a list of temperature values (in degrees Celsius) for each pixel
+        ex: [24.47631779730409, 24.225540060143487, ..., 24.225540060143487]
+
+        """
         try:
             frame = [0] * self.horizontal_size * self.vertical_size
             self.mlx.getFrame(frame)
+            print(frame)
             return frame
         except ValueError:
             return None
 
-    """Returns the average temperature for human temperature measurement
-    at a very close distance of max 10 cm
-    
-    In the event that the measured surface does not use all pixels,
-    we filter values in the range of 32-40 degrees Celsius to increase the accuracy.
-    """
     def get_temperature(self):
+        """
+        Returns the average temperature for human temperature measurement
+        at a very close distance of max 10 cm
+        
+        In the event that the measured surface does not use all pixels,
+        we filter values in the range of 32-40 degrees Celsius to increase the accuracy.
+        """
         measurement_points = self.get_frame()
 
         if measurement_points == None:
@@ -52,12 +59,13 @@ class ThermovisionSensor:
         return np.average(measurement_points)
     
 
-"""The function determines the sensor and connects to the event bus.
-
-Upon receiving a query on port 5557,
-it will return the temperature of the object on port 5555
-"""  
 def main():
+    """
+    The function determines the sensor and connects to the event bus.
+
+    Upon receiving a query on port 5557,
+    it will return the temperature of the object on port 5555
+    """  
     # Creates Argument Parser object named parser
     parser = argparse.ArgumentParser()
 
