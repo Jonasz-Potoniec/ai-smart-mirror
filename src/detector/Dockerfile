@@ -26,21 +26,16 @@ RUN apk update \
     && find / | grep -E "(__pycache__|\.pyc|\.pyo$$)" | xargs rm -rf;
 
 ARG PORT_IN=${PORT_IN:-5556} \
-    PORT_OUT=${PORT_OUT:-5555} \
     EVENT_BUS_SERVER=${EVENT_BUS_SERVER:-event-bus} \
-    TOPIC_IN=${TOPIC_IN:-1} \
-    TOPIC_OUT=${TOPIC_OUT:-2} \
-    IMAGE_HEIGHT=${IMAGE_HEIGHT:-768} \
-    IMAGE_WIDTH=${IMAGE_WIDTH:-1024} \
-    IMAGE_FORMAT=${IMAGE_FORMAT:-jpg} \
+    TOPIC_IN=${TOPIC_IN:-2} \
+    MODEL_DIR=${MODEL_DIR:-/tmp/models}
     IMAGE_DIR=${IMAGE_DIR:-/tmp/images} \
     LOG_LEVEL=${LOG_LEVEL:-WARNING}
 
 ENV PORT_IN=${PORT_IN} \
-    PORT_OUT=${PORT_OUT} \
     EVENT_BUS_SERVER=${EVENT_BUS_SERVER} \
     TOPIC_IN=${TOPIC_IN} \
-    TOPIC_OUT=${TOPIC_OUT} \
+    MODEL_DIR=${MODEL_DIR} \
     IMAGE_DIR=${IMAGE_DIR} \
     LOG_LEVEL=${LOG_LEVEL} \
     READTHEDOCS=True
@@ -51,4 +46,4 @@ EXPOSE ${PORT_IN} \
 # Run as root to have access to camera FIXME: change permission to model device
 # USER ${USER}
 COPY ./code/ /app
-ENTRYPOINT ["sh", "-c", "python camera.py --event_bus_server=$EVENT_BUS_SERVER --image_dir=$IMAGE_DIR--port_in=$PORT_IN --port_out=$PORT_OUT --topic_in=$TOPIC_IN --topic_out=$TOPIC_OUT --log_level=$LOG_LEVEL"]
+ENTRYPOINT ["sh", "-c", "python camera.py --event_bus_server=$EVENT_BUS_SERVER --port_in=$PORT_IN --topic_in=$TOPIC_IN --log_level=$LOG_LEVEL --model_dir=$MODEL_DIR --image_dir=$IMAGE_DIR"]
