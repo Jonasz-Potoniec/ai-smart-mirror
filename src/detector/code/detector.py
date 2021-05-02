@@ -34,6 +34,7 @@ def main(
         raise FileExistsError("Given directory do not exist. Directory: ", image_dir)
     # Load model
     network_model = model_loader(model_dir)
+    network_model.eval()
 
     # EVENT BUS
     # Connections and sockets preparation
@@ -69,11 +70,12 @@ def main(
         image_path = image_dir + msg
 
         # Run model
-        # TODO: result = network_model(image_path) ??
+        result = network_model(image_path)
 
         # Print result
-        # TODO: print
-        logger.info(f'Image {msg} has been scored as {result}')
+        result_text = f'Image {msg} has been classified as {result}'
+        print(result_text)
+        logger.info(result_text)
 
 
 if __name__ == "__main__":
