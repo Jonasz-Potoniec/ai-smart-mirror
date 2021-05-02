@@ -33,8 +33,8 @@ def main(
     if not os.path.exists(image_dir):
         raise FileExistsError("Given directory do not exist. Directory: ", image_dir)
     # Load model
-    network_model = model_loader(model_dir)
-    network_model.eval()
+    neural_model = model_loader(model_dir)
+    neural_model.eval()
 
     # EVENT BUS
     # Connections and sockets preparation
@@ -70,7 +70,7 @@ def main(
         image_path = image_dir + msg
 
         # Run model
-        result = network_model(image_path)
+        result = neural_model(image_path)
 
         # Print result
         result_text = f'Image {msg} has been classified as {result}'
