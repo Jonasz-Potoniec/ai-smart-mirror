@@ -1,8 +1,8 @@
-import os
 import argparse
 import logging
-
+import os
 import xdrlib
+
 import zmq
 
 from src.detector.code.model_loader import model_loader
