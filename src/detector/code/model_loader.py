@@ -1,6 +1,7 @@
 from maskmodel.mask_detector.mask_classifier import MaskClassifier
 from maskmodel.mask_detector.models.mobile_net_v2 import MobileNetV2
 
+
 def model_loader(path: str):
     """
     Load model from checkpoint file.
