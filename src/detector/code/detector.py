@@ -8,8 +8,8 @@ import zmq
 from src.detector.code.model_loader import model_loader
 
 IMAGE_CAPTURED = 2
-PIC_DIRECTORY = '/tmp/images/'
-MODEL_DIRECTORY = '/tmp/models/'
+PIC_DIRECTORY = '/temp/images/'
+MODEL_DIRECTORY = '/models/'
 
 logger = logging.getLogger(__name__)
 
@@ -110,7 +110,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '--model_dir',
         default=MODEL_DIRECTORY,
-        help='Saved model directory'
+        help='Saved model directory',
     )
     args = parser.parse_args()
 

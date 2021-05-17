@@ -1,5 +1,5 @@
-import src.detector.ai_mask_model.mask_detector.mask_classifier as model
-
+from maskmodel.mask_detector.mask_classifier import MaskClassifier
+from maskmodel.mask_detector.models.mobile_net_v2 import MobileNetV2
 
 def model_loader(path: str):
     """
@@ -11,4 +11,5 @@ def model_loader(path: str):
     Return:
         trained model based on saved model file with all trained weights.
     """
-    return model.MaskClassifier.load_from_checkpoint(path)
+    net = MobileNetV2()
+    return MaskClassifier.load_from_checkpoint(path, net=net)
