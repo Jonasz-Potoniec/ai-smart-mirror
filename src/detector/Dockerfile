@@ -28,7 +28,7 @@ RUN apk update \
 ARG PORT_IN=${PORT_IN:-5556} \
     EVENT_BUS_SERVER=${EVENT_BUS_SERVER:-event-bus} \
     TOPIC_IN=${TOPIC_IN:-2} \
-    MODEL_DIR=${MODEL_DIR:-/tmp/models}
+    MODEL_DIR=${MODEL_DIR:-/-/tmp/models}
     IMAGE_DIR=${IMAGE_DIR:-/tmp/images} \
     LOG_LEVEL=${LOG_LEVEL:-WARNING}
 
