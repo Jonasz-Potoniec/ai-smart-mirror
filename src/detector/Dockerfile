@@ -18,7 +18,6 @@ RUN apk update \
     && apk upgrade --no-cache musl \
     && apk add --no-cache build-base libzmq musl-dev python3 python3-dev zeromq-dev py3-pip \
     && apk add --no-cache raspberrypi-libs || : \
-    && apt-get install python-pip \
     && pip install --upgrade pip \
     && pip install -r requirements.txt \
     && apk del build-base musl-dev python3-dev zeromq-dev \
