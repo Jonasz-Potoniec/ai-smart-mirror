@@ -54,7 +54,7 @@ services:
       - ai-smart-mirror
 
   detector:
-    image: TODO add link
+    image: 573518775438.dkr.ecr.us-east-2.amazonaws.com/smart-mirror-detector:latest
     build:
       context: ./src/detector
     # ports:
