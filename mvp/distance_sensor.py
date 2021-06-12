@@ -74,8 +74,6 @@ def start_measuring_distance(distance: int):
 
     logging.basicConfig(level=log_level.upper())
 
-    print("DUPA")
-
     logger.info("Ultrasonic Measurement. Setting up GPIO...")
 
     distance_sensor = DistanceSensor(trigger_pin, echo_pin)
@@ -84,15 +82,19 @@ def start_measuring_distance(distance: int):
     t = Thread(target=distance_sensor.watch, args=(sleep_time, event))
     t.start()
 
+    print("OUTSIDE DUPA")
+
     # Allow module to settle
     time.sleep(sensor_settle_time)
     try:
         while True:
             logger.debug(f"Ultrasonic Measurement - Distance: {distance_sensor.distance} cm")
+            print(f'WHILE DUPA {distance_sensor.distance}')
             # Send event if measured distance is less than set threshold
             if distance_sensor.distance <= threshold_distance:
                 distance = distance_sensor.distance
                 logger.info(f'Camera send signal to ECU.')
+                print(f'INNER IF DUPA {distance_sensor.distance}')
                 time.sleep(3)  # To not spam camera with requests we waiting with some time
 
             time.sleep(sleep_time)
