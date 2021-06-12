@@ -27,7 +27,8 @@ if __name__ == "__main__":
     # Start measuring distance
     distance_thread.start()
 
-    print(distance)
+    while True:
+        print(f'DISTANCE: {distance}')
 
     # Taking a picture
     # take_snap(camera, image_format, pic_directory)
