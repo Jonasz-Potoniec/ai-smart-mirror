@@ -1,5 +1,3 @@
-# Import required Python libraries
-import argparse
 import logging
 import sys
 import time
@@ -66,29 +64,17 @@ class DistanceSensor:
 
 
 def start_measuring_distance(distance: int):
-    # Creates Argument Parser object named parser
-    parser = argparse.ArgumentParser()
-
-    # Set arguments
-    parser.add_argument('--trig', type=int, default=16, help='PIN with TRIGGER output PIN.')
-    parser.add_argument('--echo', type=int, default=18, help='PIN with ECHO input PIN.')
-    parser.add_argument('--sleep', type=float, default=0.1, help='Sleep time between distance measurements.')
-    parser.add_argument('--thresholddistance', type=int, default=80, help='Threshold distance under which sensor '
-                                                                          'will fire an event.')
-    parser.add_argument('--sensorsettletime', type=float, default=0.3, help='Time for the sensor to settle after '
-                                                                            'setting the Trigger pin to the LOW state')
-    parser.add_argument('--log_level', default="WARNING", help='Sets log level - what messages are logger.infoed out')
-
     # Get command line arguments
-    init_args = parser.parse_args()
-    trigger_pin = init_args.trig
-    echo_pin = init_args.echo
-    sleep_time = init_args.sleep
-    threshold_distance = init_args.thresholddistance
-    sensor_settle_time = init_args.sensorsettletime
-    log_level = init_args.log_level
+    trigger_pin = 16
+    echo_pin = 18
+    sleep_time = 0.1
+    threshold_distance = 80
+    sensor_settle_time = 0.3
+    log_level = "WARNING"
 
     logging.basicConfig(level=log_level.upper())
+
+    print("DUPA")
 
     logger.info("Ultrasonic Measurement. Setting up GPIO...")
 
