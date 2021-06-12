@@ -1,5 +1,7 @@
 from threading import Thread
 
+import time
+
 from distance_sensor import start_measuring_distance
 from camera import ActiveCamera
 from camera import take_snap
@@ -29,6 +31,7 @@ if __name__ == "__main__":
 
     while True:
         print(f'DISTANCE: {distance}')
+        time.sleep(3)
 
     # Taking a picture
     # take_snap(camera, image_format, pic_directory)
