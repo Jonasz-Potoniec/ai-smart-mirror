@@ -67,7 +67,7 @@ def make_snap(
     """
     Waiting for message from distance sensor. On message suitable value take snap from camera and broadcast it.
     """
-    logging.basicConfig(level="INFO")
+    logging.basicConfig(level="DEBUG")
 
     # prepare directory
     Path(image_dir).mkdir(parents=True, exist_ok=True)
@@ -84,5 +84,5 @@ def make_snap(
                 snap_name
             )
         )
-        logger.info(f'Camera took snap: {snap_name}')
+        logger.debug(f'Camera took snap: {snap_name}')
         return snap_name

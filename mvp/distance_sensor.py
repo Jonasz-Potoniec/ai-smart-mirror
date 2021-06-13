@@ -63,17 +63,17 @@ class DistanceSensor:
 
 
 def measure_distance(distance_sensor) -> float:
-    log_level = "INFO"
+    log_level = "DEBUG"
 
     logging.basicConfig(level=log_level.upper())
 
-    logger.info("Ultrasonic Measurement. Setting up GPIO...")
+    logger.info("Setting up GPIO...")
 
     try:
-        logger.debug(f"Ultrasonic Measurement - Distance: {distance_sensor.distance} cm")
+        logger.debug(f"Distance: {distance_sensor.distance} cm")
         # Send event if measured distance is less than set threshold
         distance = distance_sensor.distance
-        logger.info(f'Camera send signal to ECU.')
+        logger.info(f'Sending signal to ECU.')
 
         return distance
 

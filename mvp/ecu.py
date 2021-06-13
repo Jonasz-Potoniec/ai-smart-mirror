@@ -1,16 +1,19 @@
-from threading import Thread
-
+import logging
 import time
 
 from distance_sensor import measure_distance
 from distance_sensor import DistanceSensor
 from camera import ActiveCamera
 from camera import make_snap
-# from detector import detect_mask
+from detector import detect_mask
+
+logger = logging.getLogger(__name__)
 
 
 if __name__ == "__main__":
-    # PREPARAION
+    # PREPARATION
+    logging.basicConfig(level="DEBUG")
+
     # Prepare distance sensor
     trigger_pin = 7
     echo_pin = 11
@@ -34,17 +37,20 @@ if __name__ == "__main__":
     )
 
     # START
-
     while True:
         # Measure distance
         distance = measure_distance(distance_sensor)
 
         if distance < threshold_distance:
-            print(f'DISTANCE: {distance}')
+            logger.debug(f'Received distance: {distance} cm')
 
             # Taking a picture
             snap_name = make_snap(camera, image_format, pic_directory)
+            logger.debug(f'Snap at directory: {snap_name} cm')
             print(f'Camera took snap at: {snap_name}')
 
             # Detect mask
-            time.sleep(3)
+            detect_mask(snap_name)
+
+            # To not spam with measurements, wait until renewing the whole process
+            time.sleep(6)
