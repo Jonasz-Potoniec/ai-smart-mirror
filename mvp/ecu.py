@@ -11,7 +11,7 @@ from camera import take_snap
 if __name__ == "__main__":
     # PREPARAION
     # Prepare distance sensor
-    distance = []
+    distance = [0]
     distance_thread = Thread(target=start_measuring_distance, args=(distance,))
 
     # Prepare camera
