@@ -69,7 +69,7 @@ def take_snap(
     """
     Waiting for message from distance sensor. On message suitable value take snap from camera and broadcast it.
     """
-    logging.basicConfig("INFO")
+    logging.basicConfig(level="INFO")
 
     # prepare directory
     Path(image_dir).mkdir(parents=True, exist_ok=True)
