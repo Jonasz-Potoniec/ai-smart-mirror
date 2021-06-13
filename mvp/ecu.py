@@ -11,7 +11,7 @@ from camera import take_snap
 if __name__ == "__main__":
     # PREPARAION
     # Prepare distance sensor
-    distance = 0
+    distance = []
     distance_thread = Thread(target=start_measuring_distance, args=(distance,))
 
     # Prepare camera
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     distance_thread.start()
 
     while True:
-        print(f'DISTANCE: {distance}')
+        print(f'DISTANCE: {distance[0]}')
         time.sleep(3)
 
     # Taking a picture
