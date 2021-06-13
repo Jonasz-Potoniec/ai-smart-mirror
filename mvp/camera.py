@@ -10,8 +10,6 @@ import picamera
 SOMEONE_VISIBLE = 1
 IMAGE_CAPTURED = 2
 
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -60,12 +58,12 @@ class ActiveCamera:
             self.camera.close()
 
 
-def take_snap(
+def make_snap(
         camera,
         image_format,
         image_dir,
         **kwargs
-) -> None:
+) -> str:
     """
     Waiting for message from distance sensor. On message suitable value take snap from camera and broadcast it.
     """
@@ -87,3 +85,4 @@ def take_snap(
             )
         )
         logger.info(f'Camera took snap: {snap_name}')
+        return snap_name
