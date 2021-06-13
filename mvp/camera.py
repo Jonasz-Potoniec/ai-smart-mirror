@@ -76,23 +76,14 @@ def take_snap(
 
     with camera as active_camera:
         logger.info(f'Camera ready.')
-        # Main loop
-        while True:
-            # Waiting for any message
-            # TODO: pass signal from ECU
+        # Prepare file name
+        snap_name = f'{time.time()}.{uuid.uuid4()}.{image_format}'
 
-            # Prepare file name
-            snap_name = f'{time.time()}.{uuid.uuid4()}.{image_format}'
-
-            # Take a snap and remember image name
-            active_camera.capture(
-                os.path.join(
-                    image_dir,
-                    snap_name
-                )
+        # Take a snap and remember image name
+        active_camera.capture(
+            os.path.join(
+                image_dir,
+                snap_name
             )
-            logger.info(f'Camera took snap: {snap_name}')
-
-            # Send data
-            # TODO: pass signal to ECU
-            logger.info(f'Camera send signal to ECU.')
+        )
+        logger.info(f'Camera took snap: {snap_name}')

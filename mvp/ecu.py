@@ -34,5 +34,6 @@ if __name__ == "__main__":
 
         # Taking a picture
         take_snap(camera, image_format, pic_directory)
+        print("Camera took snap.")
 
         # Detect mask
