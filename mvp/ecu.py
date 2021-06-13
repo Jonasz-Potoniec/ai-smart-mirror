@@ -31,7 +31,8 @@ if __name__ == "__main__":
 
     while True:
         print(f'DISTANCE: {distance[0]}')
-        time.sleep(3)
 
-    # Taking a picture
-    # take_snap(camera, image_format, pic_directory)
+        # Taking a picture
+        take_snap(camera, image_format, pic_directory)
+
+        # Detect mask

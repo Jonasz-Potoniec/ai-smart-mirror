@@ -92,7 +92,7 @@ def start_measuring_distance(distance: list):
                 distance[0] = distance_sensor.distance
                 logger.info(f'Camera send signal to ECU.')
                 print(f'INNER IF DUPA {distance_sensor.distance}')
-                time.sleep(3)  # To not spam camera with requests we waiting with some time
+                time.sleep(9)  # To not spam camera with requests we waiting with some time
 
             time.sleep(sleep_time)
     except KeyboardInterrupt:
