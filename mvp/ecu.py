@@ -1,11 +1,13 @@
 import logging
 import time
+import os
 
 from distance_sensor import measure_distance
 from distance_sensor import DistanceSensor
 from camera import ActiveCamera
 from camera import make_snap
 from detector import detect_mask
+from detector import model_loader
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +38,19 @@ if __name__ == "__main__":
         height=image_height,
     )
 
+    # Prepare model
+    model_dir = 'tmp/models/epoch=16-step=8499.ckpt'
+    # Check if model directory exist
+    if not os.path.exists(model_dir):
+        raise FileExistsError("Given directory do not exist. Directory: ", model_dir)
+
+    image_dir = 'tmp/images/'
+    # Check if image directory exist
+    if not os.path.exists(image_dir):
+        raise FileExistsError("Given directory do not exist. Directory: ", image_dir)
+    # Load model
+    neural_model = model_loader(model_dir)
+
     # START
     while True:
         # Measure distance
@@ -50,7 +65,7 @@ if __name__ == "__main__":
             print(f'Camera took snap at: {snap_name}')
 
             # Detect mask
-            detect_mask(snap_name)
+            detect_mask(snap_name, neural_model)
 
             # To not spam with measurements, wait until renewing the whole process
             time.sleep(6)

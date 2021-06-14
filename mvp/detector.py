@@ -27,23 +27,14 @@ def model_loader(path: str):
 
 
 def detect_mask(
-        model_dir,
         image_dir,
+        neural_model,
         **kwargs
 ) -> None:
     logging.basicConfig(level="DEBUG")
     """
     Waiting for message from camera. On message suitable value check image with the network model.
     """
-    # PREPARATION
-    # Check if model directory exist
-    if not os.path.exists(model_dir):
-        raise FileExistsError("Given directory do not exist. Directory: ", model_dir)
-    # Check if image directory exist
-    if not os.path.exists(image_dir):
-        raise FileExistsError("Given directory do not exist. Directory: ", image_dir)
-    # Load model
-    neural_model = model_loader(model_dir)
     neural_model.eval()
 
     # MODEL
