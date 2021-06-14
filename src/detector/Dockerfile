@@ -43,7 +43,7 @@ ENV PORT_IN=${PORT_IN} \
 EXPOSE ${PORT_IN} \
        ${PORT_OUT}
 
-# Run as root to have access to camera FIXME: change permission to model device
+# Run as root to have access to detector FIXME: change permission to model device
 # USER ${USER}
 COPY ./code/ /app
-ENTRYPOINT ["sh", "-c", "python camera.py --event_bus_server=$EVENT_BUS_SERVER --port_in=$PORT_IN --topic_in=$TOPIC_IN --log_level=$LOG_LEVEL --model_dir=$MODEL_DIR --image_dir=$IMAGE_DIR"]
+ENTRYPOINT ["sh", "-c", "python detector.py --event_bus_server=$EVENT_BUS_SERVER --port_in=$PORT_IN --topic_in=$TOPIC_IN --log_level=$LOG_LEVEL --model_dir=$MODEL_DIR --image_dir=$IMAGE_DIR"]
