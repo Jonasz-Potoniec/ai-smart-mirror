@@ -12,7 +12,7 @@ ENV IMG_VERSION=${IMG_VERSION} \
 RUN addgroup -S ${USER} \
     && adduser -S ${USER} -G ${USER}
 
-COPY ./requirements.txt /app
+COPY ./requirements.txt /app 
 
 RUN apk update \
     && apk upgrade --no-cache musl \
@@ -46,4 +46,10 @@ EXPOSE ${PORT_IN} \
 # Run as root to have access to detector FIXME: change permission to model device
 # USER ${USER}
 COPY ./code/ /app
+
+# Install mask model
+COPY tmp/lib/* lib/mask-model
+RUN python lib/mask-model/setup.py
+
 ENTRYPOINT ["sh", "-c", "python detector.py --event_bus_server=$EVENT_BUS_SERVER --port_in=$PORT_IN --topic_in=$TOPIC_IN --log_level=$LOG_LEVEL --model_dir=$MODEL_DIR --image_dir=$IMAGE_DIR"]
+
