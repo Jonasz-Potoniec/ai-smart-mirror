@@ -1,6 +1,3 @@
 [submodule "src/detector/ai_mask_model"]
-	path = src/detector/ai_mask_model
-	url = https://github.com/HTD-Health/ai-mask-model.git
-[submodule "tmp/lib/ai-mask-model"]
-	path = tmp/lib/ai-mask-model
+	path = src/detector/lib/ai_mask_model
 	url = https://github.com/HTD-Health/ai-mask-model.git
