@@ -49,7 +49,7 @@ COPY ./code/ /app
 
 # Install mask model
 COPY lib/ai-mask-model ai-mask-model
-RUN python ai-mask-model/setup.py install
+RUN pip install -e ai-mask-model/. 
 
 ENTRYPOINT ["sh", "-c", "python detector.py --event_bus_server=$EVENT_BUS_SERVER --port_in=$PORT_IN --topic_in=$TOPIC_IN --log_level=$LOG_LEVEL --model_dir=$MODEL_DIR --image_dir=$IMAGE_DIR"]
 
