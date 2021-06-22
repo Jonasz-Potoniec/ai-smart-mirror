@@ -1,4 +1,6 @@
 FROM python:3.8-slim
+# pytorch/pytorch
+# 
 
 WORKDIR /app
 
@@ -16,15 +18,23 @@ COPY ./requirements.txt /app
 
 RUN echo "|---> Update system" \
     && apt-get update \
+    && apt-get install build-essential musl-dev \
     && apt-get upgrade musl \
-    && apt-get install build-base libzmq musl-dev zeromq-dev \
     && apt-get install raspberrypi-libs || : \
-    && echo "|---> Install g++" \
-    apt-get -y install gcc mono-mcs && \
-    rm -rf /var/lib/apt/lists/* \
+    # Resolving installation problems with pyzmq
+    && echo "|---> Install req's for pyzmq" \
+    && apt-get -y install gcc mono-mcs \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install --upgrade pip setuptools wheel \
+    && pip install p5py \
+    && pip install PEP517 \
+    # && add-apt-repository ppa:chris-lea/zeromq \
+    # && apt-get update \
+    && apt-get install libzmq3-dbg libzmq3-dev libzmq3 \
     && echo "|---> Install Python libs" \
-    && python -m pip install --upgrade pip \
-    && python -m pip install -r requirements.txt \
+    && pip install --upgrade pip \
+    # && pip install pyzmq \
+    && pip install -r requirements.txt --no-binary :all: \
     && echo "|---> Create symbolic links" \ 
     && ln -s /usr/bin/python3 /usr/bin/python \
     && echo "|---> Cleaning" \
