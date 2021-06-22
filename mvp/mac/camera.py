@@ -5,7 +5,7 @@ import uuid
 
 from pathlib import Path
 
-import picamera
+import cv2
 
 SOMEONE_VISIBLE = 1
 IMAGE_CAPTURED = 2
@@ -15,14 +15,12 @@ logger = logging.getLogger(__name__)
 
 class CameraInterface:
     """
-    Class for handling camera device using picamera library.
+    Class for handling camera device using OpenCV library.
     """
     def __init__(self, height: int, width: int):
         self.height = height
         self.width = width
-        self.camera = picamera.PiCamera()
-        self.camera.resolution = (self.width, self.height)
-        self.camera.start_preview()
+        self.camera = cv2.VideoCapture(0) # Number which capture webcam in my machine
         # Camera warm-up time
         time.sleep(2)
 
@@ -33,14 +31,16 @@ class CameraInterface:
         Parameters:
             filename (str): name of the file with captured image.
         """
-        self.camera.capture(filename)
+        check, frame = self.camera.read()
+        resized_frame = cv2.resize(frame, (self.width, self.height), )
+        cv2.imwrite(filename=filename, img=resized_frame)
 
     def close(self):
         """
         Closes video file or capturing device.
         """
         if self.camera:
-            self.camera.close()
+            self.camera.release()
 
 
 class ActiveCamera:
@@ -73,7 +73,7 @@ def make_snap(
     Path(image_dir).mkdir(parents=True, exist_ok=True)
 
     with camera as active_camera:
-        logger.info(f'Camera ready.')
+        logger.info('Ready!')
         # Prepare file name
         snap_name = f'{time.time()}.{uuid.uuid4()}.{image_format}'
 
@@ -84,5 +84,5 @@ def make_snap(
                 snap_name
             )
         )
-        logger.debug(f'Camera took snap: {snap_name}')
+        logger.debug(f'Took snap: {snap_name}')
         return snap_name

@@ -1,5 +1,7 @@
 import logging
-import os
+
+from PIL import Image
+from torchvision.transforms import (CenterCrop, Compose, Normalize, Resize, ToTensor)
 
 from mask_detector.mask_classifier import MaskClassifier
 from mask_detector.models.mobile_net_v2 import MobileNetV2
@@ -31,19 +33,26 @@ def detect_mask(
         neural_model,
         **kwargs
 ) -> None:
-    logging.basicConfig(level="DEBUG")
     """
     Waiting for message from camera. On message suitable value check image with the network model.
     """
-    neural_model.eval()
+    logging.basicConfig(level="DEBUG")
 
     # MODEL
-    logger.info(f'Model ready.')
-    # Main loop
+    neural_model.eval()
+    logger.info('Model ready.')
+
+    # Prepare object
+    transform = Compose([
+        Resize(256),  # for MobileNetV2 - set image size to 256
+        CenterCrop(224),
+        ToTensor(),
+        Normalize(mean=[0.485, 0.456, 0.406, 0.485], std=[0.229, 0.224, 0.225]),  # Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
+    image = Image.open(image_dir)
+
     # Run model
-    result = neural_model(image_dir)
+    result = neural_model(transform(image))
 
     # Print result
-    result_text = f'Image {image_dir} has been classified as {result}'
-    print(result_text)
-    logger.info(result_text)
+    logger.info(f'Image has been classified as {result}')
