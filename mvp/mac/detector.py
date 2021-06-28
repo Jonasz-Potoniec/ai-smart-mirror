@@ -6,6 +6,8 @@ from torchvision.transforms import (CenterCrop, Compose, Normalize, Resize, ToTe
 from mask_detector.mask_classifier import MaskClassifier
 from mask_detector.models.mobile_net_v2 import MobileNetV2
 
+from torch.utils.data import DataLoader
+
 
 IMAGE_CAPTURED = 2
 PIC_DIRECTORY = '/temp/images/'
@@ -47,9 +49,10 @@ def detect_mask(
         Resize(256),  # for MobileNetV2 - set image size to 256
         CenterCrop(224),
         ToTensor(),
-        Normalize(mean=[0.485, 0.456, 0.406, 0.485], std=[0.229, 0.224, 0.225]),  # Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        Normalize(mean=[0.406, 0.456, 0.485], std=[0.225, 0.224, 0.229]),  # Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
-    image = Image.open(image_dir)
+    image = DataLoader([image_dir], batch_size=1)  # image = Image.open(image_dir)
+    # logger.debug("IMAGE SIZE: " + str(image.shape))
 
     # Run model
     result = neural_model(transform(image))
