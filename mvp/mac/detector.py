@@ -46,6 +46,7 @@ def detect_mask(
     logger.info('Model ready.')
 
     # Prepare object
+    # Fixme: prepare object section does not work
     image = Image.open(image_dir)
 
     transform = Compose([
