@@ -10,7 +10,7 @@ from detector import model_loader
 logger = logging.getLogger(__name__)
 
 
-def run(camera, image_format, snap_directory, neural_model):
+def run(camera: object, image_format: str, snap_directory: str, neural_model: object):
     # Taking a picture
     snap_name = make_snap(camera, image_format, snap_directory)
     logger.debug(f'Snap at directory: {snap_name}')
@@ -24,6 +24,7 @@ def run(camera, image_format, snap_directory, neural_model):
 
     # To not spam with measurements, wait until renewing the whole process
     time.sleep(20)
+
 
 if __name__ == "__main__":
     # PREPARATION
@@ -43,16 +44,15 @@ if __name__ == "__main__":
 
     # Prepare model
     model_dir = 'mvp/mac/tmp/models/epoch=16-step=8499.ckpt'
-    # Check if model directory exist
     if not os.path.exists(model_dir):
         raise FileExistsError("Given directory do not exist. Directory: ", model_dir)
 
+    neural_model = model_loader(model_dir)
+
+    # Prepare image destination
     image_dir = 'mvp/mac/tmp/images/'
-    # Check if image directory exist
     if not os.path.exists(image_dir):
         raise FileExistsError("Given directory do not exist. Directory: ", image_dir)
-    # Load model
-    neural_model = model_loader(model_dir)
 
     # START
     while True:

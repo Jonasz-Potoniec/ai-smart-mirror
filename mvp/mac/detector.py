@@ -27,12 +27,12 @@ def model_loader(path: str):
         trained model based on saved model file with all trained weights.
     """
     net = MobileNetV2()
-    return MaskClassifier.load_from_checkpoint(path, net=net)
+    return MaskClassifier.load_from_checkpoint(checkpoint_path=path, net=net)
 
 
 def detect_mask(
-        image_dir,
-        neural_model,
+        image_dir: str,
+        neural_model: MaskClassifier,
         **kwargs
 ) -> None:
     """
@@ -42,20 +42,23 @@ def detect_mask(
 
     # MODEL
     neural_model.eval()
+    neural_model.freeze()
     logger.info('Model ready.')
 
     # Prepare object
+    image = Image.open(image_dir)
+
     transform = Compose([
         Resize(256),  # for MobileNetV2 - set image size to 256
         CenterCrop(224),
         ToTensor(),
         Normalize(mean=[0.406, 0.456, 0.485], std=[0.225, 0.224, 0.229]),  # Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
-    image = DataLoader([image_dir], batch_size=1)  # image = Image.open(image_dir)
-    # logger.debug("IMAGE SIZE: " + str(image.shape))
+
+    transformed_image = transform(image)
 
     # Run model
-    result = neural_model(transform(image))
+    y_hat = neural_model(transformed_image)
 
     # Print result
-    logger.info(f'Image has been classified as {result}')
+    logger.info(f'Image has been classified as {y_hat}')
