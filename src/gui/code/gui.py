@@ -26,7 +26,7 @@ class PyQtMainWindow(QMainWindow):
         self.resolutionY = 1080
         QMainWindow.__init__(self)
         self.resize(self.resolutionX, self.resolutionY)
-        self.showFullScreen()
+        #self.showFullScreen()
         self.setStyleSheet("""
             color:white; 
             background:black;
@@ -42,18 +42,23 @@ class PyQtMainWindow(QMainWindow):
         self.maskStateLabel = QLabel()
         self.maskStateLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.maskStateLabel.setText("No information from ML module")
-        self.maskStateLabel.setFont(QFont("Monaco", 50))
+        self.maskStateLabel.setFont(QFont("Monaco", 100))
         self.maskStateLabel.setStyleSheet("""
             border-bottom: 3px solid white;
         """)
-        self.maskStateLabel.setFixedWidth(int(self.resolutionX/2))
+        self.maskStateLabel.setFixedWidth(int(self.resolutionX*0.95))
         vBoxLayout.addWidget(self.maskStateLabel)
 
         self.maskPercentageLabel = QLabel()
         self.maskPercentageLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.maskPercentageLabel.setText("")
-        self.maskPercentageLabel.setFont(QFont("Monaco", 30))
+        self.maskPercentageLabel.setFont(QFont("Monaco", 75))
         vBoxLayout.addWidget(self.maskPercentageLabel)
+
+        self.maskIcon = QtSvg.QSvgWidget(self)
+        self.maskIcon.setFixedWidth(400)
+        self.maskIcon.setFixedHeight(350)
+        self.maskIcon.move((self.resolutionX-400)/2, self.resolutionY - 400)
 
         vBoxLayout.addStretch()
         self.show()
@@ -69,8 +74,10 @@ class PyQtMainWindow(QMainWindow):
     def updateMaskData(self, certainty, state):
         if True: # todo: check if mask is on
             self.maskStateLabel.setText("Mask detected!")
+            self.maskIcon.load('./assets/mask.svg')
         elif False:
             self.maskStateLabel.setText("No mask detected!")
+            self.maskIcon.load('./assets/sad.svg')
         
         self.maskPercentageLabel.setText(f"Certainty: {certainty}%")
 
